@@ -1,20 +1,71 @@
+import { useEffect, useState } from 'react';
 import './App.css'
-import { BrowserRouter as Router , Route, Routes } from 'react-router-dom'
-import HomePage from './components/pages/home/HomePage'
-import NoPage from './components/pages/nopages/NoPage'
+import axios from 'axios';
 
 
-function App() {
-  
+const App=()=>
+  {
+    const [userData,setUserData]=useState([]);
+    const [page,setpage]=useState("");
+
+    const getData=async()=>
+    {
+      const response=await axios.get(`https://picsum.photos/v2/list?page=${page}&limit=10`);
+      
+      setUserData(response.data);
+
+      console.log(userData);
+      
+    }
+
+    useEffect(function()
+    {
+      getData();
+    },[page])
+
+    let printUserData="No User Avilable"
+
+    if(userData.length>0)
+    {
+      printUserData=userData.map((elem)=>
+      {
+        return(
+          
+                <div key={elem.id} className="h-40 w-40 ">
+                  <h3>{elem.author}</h3>
+                  <img
+                  className='h-full w-full object-cover rounded-2xl'
+                    src={elem.download_url}
+                    alt={elem.author}
+                    width="200"
+                  />
+                </div>
+         
+
+        );
+        
+      })
+    }
+    
+
   return(
-    <div>
-      <Router>
-        <Routes>
-          <Route path='/' element={<HomePage/>}/>
-          <Route path="/*" element={<NoPage/>}/>
-        </Routes>
-      </Router>
-    </div>
+        <div className='p-10 '>
+          <div className="flex flex-wrap gap-9">
+           {printUserData}
+          </div>
+
+          <div className="flex justify-center items-center gap-4 mt-15">
+            <button className="px-4 py-2 bg-gray-500 text-white rounded"
+            onClick={()=>{setpage(page+1)}}>
+              Previous
+            </button>
+
+            <button className="px-4 py-2 bg-blue-500 text-white rounded"
+            onClick={()=>{setpage(page+1)}}>
+              Next
+            </button>
+          </div>
+        </div>
   )
 }
 
