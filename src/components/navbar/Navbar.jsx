@@ -5,6 +5,7 @@ function Navbar() {
     <div
     className='h-15 w-full bg-black text-white'>
       Navbar
+      <h1>LOGO</h1>
     </div>
   )
 }
